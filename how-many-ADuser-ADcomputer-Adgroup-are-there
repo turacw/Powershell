@@ -1,0 +1,9 @@
+#This commmand show and measure how many users are there on AD
+Get-ADUser -Filter * | Measure-Object
+
+#This commmand show and measure how many computers are there on AD
+Get-ADComputer -Filter * | Measure-Object
+
+#This commmand show and measure how many AD Groups are there on AD
+Get-ADGroup -Filter * | Measure-Object
+
