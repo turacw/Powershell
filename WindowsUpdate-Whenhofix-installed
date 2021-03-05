@@ -1,0 +1,3 @@
+#This powershell command show the hotfix on computer which is which category,when,how manys days ago and by whom
+
+Get-Hotfix | Select-Object -Property Description,HotFixID,Installedon,@{n='HotFixAge';e={(New-TimeSpan -Start $PSItem.InstalledOn).Days}},InstalledBy |Sort-Object -Descending Installedon |Format-Table
