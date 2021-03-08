@@ -1,0 +1,2 @@
+	#This script create new string on Regedit
+  New-ItemProperty -Path HKLM:\Software\Demo -Name Demo -Value Test -PropertyType String
