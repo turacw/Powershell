@@ -1,0 +1,3 @@
+# In this command you can copy or move files and folders greater than 1 GB
+
+Get-ChildItem -Path "C:\" -Recurse -ErrorAction SilentlyContinue |Where-Object Length -GT 1073741824  |Move-Item -Destination "C:\Users\ali örtül\bigfiles" -Force
