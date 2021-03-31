@@ -1,0 +1,3 @@
+#this command get service which is running and name starting with some characters after than set the service 
+ 
+ Get-Service -Name AdobeARMservice |Where-Object{$_.Status -eq "running"} |Set-Service -Status Running
