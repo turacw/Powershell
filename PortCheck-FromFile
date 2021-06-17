@@ -1,0 +1,4 @@
+
+#Port check from file and write just computername and true false 
+
+Get-Content .\test.txt |Test-NetConnection -Port 443 |Select-Object -Property Computername,TcpTestSucceeded
