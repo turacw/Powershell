@@ -1,0 +1,26 @@
+#### Powershell ile Windows Server Backup Alma --> Aşağıdaki komutlar ile Powershell üzerinden Windows Server backup cmdlet kullanılarak backup alınabilir ###
+
+#1- İlk olarak sunucuda Windows Server Backup yüklü ise ilgili cmdlet var mı kontrol edilir.
+Get-Command -Module WindowsServerBackup -CommandType Cmdlet
+
+#2- $Policy değişkeni yeni Serverbackup policy temsil ederi. $FileSpec nerenin backupının alınacağını.
+$Policy = New-WBPolicy
+$Filespec = New-WBFileSpec -FileSpec "C:\Dosyalarim"
+
+#3- Tanımlarını yaptığımız Değişkenler yeni bir Policy create edilirken çalıştırılır.
+Add-WBFileSpec -Policy $Policy -FileSpec $FileSpec
+
+
+#4- Backup alacak credential ve backup'un network üzerinde nereye alınacağı belirtilir.
+$Cred = Get-Credential
+$NetworkBackupLocation = New-WBBackupTarget -NetworkPath "\\DC01\Backup" -Credential $Cred
+
+
+#5- Backup policy'e tanımladığımız backup policy eklenir.
+Add-WBBackupTarget -Policy $Policy -Target $NetworkBackupLocation
+
+#6- Backup Job'ı başlatmadan önce Volume Shadow Copy servisini enable ediyoruz.
+Set-WBVssBackupOptions -Policy $Policy -VssCopyBackup
+
+#7- Backup job başlatılır
+Start-WBBackup -Policy $Policy
