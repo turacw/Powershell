@@ -1,0 +1,31 @@
+#Bu script AD üzerinde toplu user oluşturmak için kullanılır
+
+#Bu script User1..User10'a kadar 'GreenIT' domaininde 'TestOU' altında user create eder. 
+
+# Değişkenleri Gir
+$NewOU = 'TestOU'
+$Domain = "GreenIT.local"
+$OU = "OU=$NewOU,DC=GreenIT,DC=local"
+$Password = ConvertTo-SecureString "Passw0rd" -AsPlainText -Force
+
+#1 New OU Oluştur
+
+New-ADOrganizationalUnit -Name $NewOU -Path "DC=GreenIT,DC=local"
+
+
+#2 Active Directory kullanıcılarını oluştur
+For ($i=1; $i -le 10; $i++) {
+    $UserName = "User$i"
+    $DistinguishedName = "CN=$UserName,$OU"
+
+    # Kullanıcı domain'de yoksa oluştur
+    if (!(Get-ADUser -Filter {SamAccountName -eq $UserName})) {
+        New-ADUser -Name $UserName -SamAccountName $UserName -UserPrincipalName "$UserName@$Domain" `
+            -Path $OU -AccountPassword $Password -Enabled $true
+        Write-Host "Domain kullanıcısı oluşturuldu: $UserName"
+    } else {
+        Write-Host "Kullanıcı zaten mevcut: $UserName"
+    }
+}
+
+Write-Host "Tüm kullanıcılar oluşturuldu!"
